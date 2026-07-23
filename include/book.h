@@ -19,7 +19,7 @@ typedef struct {
 Book inputBook(void);
 void printBook(Book book);
 //bool isBookIdUnique(int id);
-//void saveBook(Book book);
+void saveBook(Book book);
 //void addBook(void);
 
 #endif

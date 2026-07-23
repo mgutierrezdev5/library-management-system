@@ -33,3 +33,17 @@ void printBook(Book book){
     printf("Category: %s\n", book.category);
     printf("Available: %s\n", book.available ? "Yes" : "No");
 }
+
+void saveBook(Book book){
+
+    FILE *file = fopen("data/books.dat","ab");
+
+    if (file == NULL){
+        printf("Error opening file. \n");
+        return;
+    }
+
+    fwrite(&book, sizeof(Book), 1, file);
+
+    fclose(file);
+}
