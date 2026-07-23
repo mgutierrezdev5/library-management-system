@@ -17,8 +17,9 @@ typedef struct {
 } Book;
 
 Book inputBook(void);
-bool isBookIdUnique(int id);
-void saveBook(Book book);
-void addBook(void);
+void printBook(Book book);
+//bool isBookIdUnique(int id);
+//void saveBook(Book book);
+//void addBook(void);
 
 #endif
