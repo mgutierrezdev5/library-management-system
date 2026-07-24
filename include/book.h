@@ -18,8 +18,8 @@ typedef struct {
 
 Book inputBook(void);
 void printBook(Book book);
-//bool isBookIdUnique(int id);
 void saveBook(Book book);
-//void addBook(void);
+void readBooks(void);
+void searchBookById(int id);
 
 #endif

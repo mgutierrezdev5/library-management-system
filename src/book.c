@@ -47,3 +47,49 @@ void saveBook(Book book){
 
     fclose(file);
 }
+
+void readBooks(void){
+
+    Book book;
+
+    FILE *file = fopen("data/books.dat","rb");
+
+    if (file == NULL){
+        printf("No books have been saved yet.\n");
+        return;
+    }
+
+    while (fread(&book, sizeof(Book), 1, file) == 1){
+
+        printBook(book);
+    }
+
+    fclose(file);
+
+}
+
+void searchBookById(int id){
+
+    Book book;
+    bool found = false;
+
+    FILE *file = fopen("data/books.dat","rb");
+
+    if (file == NULL){
+        printf("Error opening file. \n");
+        return;
+    }
+
+    while (fread(&book, sizeof(Book), 1, file) == 1){
+        if(book.id == id){
+            printBook(book);
+            found = true;
+            break;
+        }
+    }
+    if (!found){
+        printf("Book not found.\n");
+    }
+
+    fclose(file);
+}
