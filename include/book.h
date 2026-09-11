@@ -21,5 +21,6 @@ void printBook(Book book);
 void saveBook(Book book);
 void readBooks(void);
 void searchBookById(int id);
+void editBook(int id);
 
 #endif

@@ -93,3 +93,44 @@ void searchBookById(int id){
 
     fclose(file);
 }
+
+void editBook(int id){
+    Book book;
+    bool found = false;
+
+    FILE *file = fopen("data/books.dat", "r+b");
+
+    if (file == NULL){
+        printf("Error opening file. \n");
+        return;
+    }
+
+    while (fread(&book, sizeof(Book), 1, file) == 1){
+        if(book.id == id){
+            
+            printf("Enter the new title: ");
+            scanf(" %[^\n]", book.title);
+
+            printf("Enter the new author: ");
+            scanf(" %[^\n]", book.author);
+
+            printf("Enter the new publication year: ");
+            scanf("%d", &book.publicationYear);
+
+            printf("Enter the new category: ");
+            scanf(" %[^\n]", book.category);
+
+            fseek(file, -sizeof(Book), SEEK_CUR);
+            fwrite(&book, sizeof(Book), 1, file);
+
+            found = true;
+            break;
+        }
+    }
+    if (!found){
+        printf("Book not found.\n");
+    }
+
+    fclose(file);
+    
+}
