@@ -18,7 +18,8 @@ void menu(void){
         printf("2. Show all books\n");
         printf("3. Search book by ID\n");
         printf("4. Edit a book by ID\n");
-        printf("5. Exit\n");
+        printf("5. Delete a book by ID\n");
+        printf("6. Exit\n");
         printf("Choose an option: ");
         scanf("%d", &option);
         switch (option){
@@ -49,6 +50,14 @@ void menu(void){
                 break;
             }
             case 5:
+            {
+                int id;
+                printf("Enter the ID: ");
+                scanf("%d", &id);
+                deleteBook(id);
+                break;
+            }
+            case 6:
             {
                 running = false;
                 break;

@@ -134,3 +134,45 @@ void editBook(int id){
     fclose(file);
     
 }
+
+void deleteBook(int id){
+    Book book;
+    bool found = false;
+
+    FILE *file = fopen("data/books.dat","rb");
+    FILE *temp = fopen("data/temp.dat", "wb");
+
+    if (file == NULL){
+        printf("Error opening file. \n");
+        return;
+    }
+
+    if (temp == NULL)
+    {
+        printf("Error opening temporary file.\n");
+        fclose(file);
+        return;
+    }
+
+    while (fread(&book, sizeof(Book), 1, file) == 1){
+        if(book.id == id){
+            found = true;
+        } else {
+            fwrite(&book, sizeof(book), 1, temp);
+        }
+    }
+
+    fclose(temp);
+    fclose(file);
+
+    if (!found){
+        printf("Book not found.\n");
+        remove("data/temp.dat");
+    } else {
+        remove("data/books.dat");
+        rename("data/temp.dat", "data/books.dat");
+
+        printf("Book with ID %d was deleted successfully.\n", id);
+    }
+
+}
