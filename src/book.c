@@ -1,5 +1,6 @@
 #include "book.h"
 #include <stdio.h>
+#include <time.h>
 
 Book inputBook (void){
     Book newBook;
@@ -19,6 +20,9 @@ Book inputBook (void){
     printf("Enter category: ");
     scanf(" %[^\n]", newBook.category);
 
+    newBook.borrower[0] = '\0';
+    newBook.loanDate[0] = '\0';
+
     newBook.available = true;
 
     return newBook;
@@ -32,6 +36,10 @@ void printBook(Book book){
     printf("Publication Year: %d\n", book.publicationYear);
     printf("Category: %s\n", book.category);
     printf("Available: %s\n", book.available ? "Yes" : "No");
+    if(!book.available){
+        printf("Borrower: %s\n", book.borrower);
+        printf("Date: %s\n", book.loanDate);
+    }
 }
 
 void saveBook(Book book){
@@ -175,4 +183,81 @@ void deleteBook(int id){
         printf("Book with ID %d was deleted successfully.\n", id);
     }
 
+}
+
+void borrowBook(int id){
+    Book book;
+    bool found = false;
+
+    FILE *file = fopen("data/books.dat", "r+b");
+    if (file == NULL){
+        printf("Error opening file. \n");
+        return;
+    }
+
+    while (fread(&book, sizeof(Book), 1, file) == 1){
+        if(book.id == id){
+
+            found = true;
+            if(!book.available){
+                printf("The book is not available.\n");
+                break;
+            }
+
+            printf("Ingrese su nombre: ");
+            scanf(" %[^\n]", book.borrower);
+
+            time_t now = time(NULL);
+            struct tm *date = localtime(&now);
+            strftime(book.loanDate, MAX_DATE_LENGTH, "%Y-%m-%d", date);
+
+            book.available = false;
+
+            fseek(file, -sizeof(Book), SEEK_CUR);
+            fwrite(&book, sizeof(Book), 1, file);
+            
+            break;
+        }
+    }
+    if (!found){
+        printf("Book not found.\n");
+    }
+
+    fclose(file);
+}
+
+void returnBook(int id){
+    Book book;
+    bool found = false;
+
+    FILE *file = fopen("data/books.dat", "r+b");
+    if (file == NULL){
+        printf("Error opening file. \n");
+        return;
+    }
+
+    while (fread(&book, sizeof(Book), 1, file) == 1){
+        if(book.id == id){
+            found = true;
+
+            if(book.available){
+                printf("The book is already available.\n");
+                break;
+            }
+
+            book.borrower[0] = '\0';
+            book.loanDate[0] = '\0';
+            book.available = true;
+
+            fseek(file, -sizeof(Book), SEEK_CUR);
+            fwrite(&book, sizeof(Book), 1, file);
+            
+            break;
+        }
+    }
+    if (!found){
+        printf("Book not found.\n");
+    }
+
+    fclose(file);    
 }
